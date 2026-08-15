@@ -74,3 +74,169 @@ def check(nums):
             break
     return n
 
+# merge sort
+# divides the array into two halves, sorts them recursively, and then merges the sorted halves
+
+def merge_sort(arr):
+    # Base case:
+    # If the array has 0 or 1 element,
+    # it is already sorted.
+    if len(arr) <= 1:
+        return arr
+
+    # Find the middle index
+    mid = len(arr) // 2
+
+    # Divide the array into two halves
+    left = arr[:mid]
+    right = arr[mid:]
+
+    # Recursively sort the left half
+    left = merge_sort(left)
+
+    # Recursively sort the right half
+    right = merge_sort(right)
+
+    # Merge the two sorted halves
+    return merge(left, right)
+
+
+def merge(left, right):
+    result = []
+
+    # i points to the current element of left
+    # j points to the current element of right
+    i = 0
+    j = 0
+
+    # Compare elements from both arrays
+    while i < len(left) and j < len(right):
+
+        # Take the smaller element
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+
+        else:
+            result.append(right[j])
+            j += 1
+
+    # If elements are remaining in left,
+    # add them to result
+    while i < len(left):
+        result.append(left[i])
+        i += 1
+
+    # If elements are remaining in right,
+    # add them to result
+    while j < len(right):
+        result.append(right[j])
+        j += 1
+
+    return result
+
+
+# Example
+arr = [5, 2, 8, 1, 3, 7]
+
+print("Before sorting:", arr)
+
+sorted_arr = merge_sort(arr)
+
+print("After sorting:", sorted_arr)
+
+
+
+    #          [5,2,8,1,3,7]
+    #           /          \
+    #       [5,2,8]       [1,3,7]
+    #       /   \          /   \
+    #    [5]   [2,8]    [1]   [3,7]
+
+#     [2] + [8]       → [2,8]
+# [5] + [2,8]     → [2,5,8]
+
+# [3] + [7]       → [3,7]
+# [1] + [3,7]     → [1,3,7]
+
+# [2,5,8] + [1,3,7]
+#               ↓
+#         [1,2,3,5,7,8]
+
+# Time: O(n log n)
+# Space: O(n)
+
+# quick sort
+# selects a pivot element and partitions the array around it, then recursively sorts the sub-arrays
+
+def quick_sort(arr, low, high):
+
+    # Continue only if there are at least
+    # two elements to sort
+    if low < high:
+
+        # Partition the array
+        # and get the pivot's final position
+        pivot_index = partition(arr, low, high)
+
+        # Sort elements BEFORE the pivot
+        quick_sort(arr, low, pivot_index - 1)
+
+        # Sort elements AFTER the pivot
+        quick_sort(arr, pivot_index + 1, high)
+
+
+def partition(arr, low, high):
+
+    # Choose the last element as the pivot
+    pivot = arr[high]
+
+    # i keeps track of where the smaller
+    # elements should be placed
+    i = low - 1
+
+    # Check every element from low to high-1
+    for j in range(low, high):
+
+        # If current element is smaller
+        # than or equal to the pivot
+        if arr[j] <= pivot:
+
+            # Move i forward
+            i += 1
+
+            # Swap arr[i] and arr[j]
+            arr[i], arr[j] = arr[j], arr[i]
+
+    # Put the pivot in its correct position
+    arr[i + 1], arr[high] = arr[high], arr[i + 1]
+
+    # Return the pivot's final position
+    return i + 1
+
+
+# Example
+arr = [5, 2, 8, 1, 3, 7]
+
+print("Before sorting:", arr)
+
+quick_sort(arr, 0, len(arr) - 1)
+
+print("After sorting:", arr)
+
+
+# [5, 2, 8, 1, 3, 7]
+# pivot = 7
+# Smaller than 7     Pivot     Greater than 7
+
+# [5, 2, 1, 3]         7            [8]
+# [5, 2, 1, 3, 7, 8]
+#              ↑
+#            pivot
+# [1, 2, 3, 5, 7, 8]
+# Average time: O(n log n)
+# Worst case: O(n²)
+# Space: O(log n) average recursion stack.
+
+
+
